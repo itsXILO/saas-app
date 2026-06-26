@@ -7,6 +7,11 @@ import { BlogTitles } from './pages/BlogTitles.jsx'
 import { Community } from './pages/Community.jsx'
 import { Dashboard } from './pages/Dashboard.jsx'
 import { Home } from './pages/Home.jsx'
+import GenerateImages from './pages/GenerateImages.jsx'
+import RemoveBg from './pages/RemoveBg.jsx'
+import RemoveObjects from './pages/RemoveObjects.jsx'
+import WriteArticle from './pages/WriteArticle.jsx'
+import ReviewResume from './pages/ReviewResume.jsx'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +30,26 @@ const router = createBrowserRouter([
   {
     path: '/blog-titles',
     element: <BlogTitles />,
+  },
+  {
+    path: '/generate-images',
+    element: <GenerateImages />,
+  },
+  {
+    path: '/remove-bg',
+    element: <RemoveBg />,
+  },
+  {
+    path: '/remove-objects',
+    element: <RemoveObjects />,
+  },
+  {
+    path: '/write-article',
+    element: <WriteArticle />,
+  },
+  {
+    path: '/review-resume',
+    element: <ReviewResume />,
   },
 ])
 
