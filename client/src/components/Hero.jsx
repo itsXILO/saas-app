@@ -20,7 +20,7 @@ const Hero = () => {
         </p>
 
         <div className='mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row'>
-          <button onClick={() => navigate('/layout', { state: { openSidebar: true } })} className='rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-cyan-500/20 transition-transform duration-200 hover:-translate-y-0.5 hover:opacity-95'>
+          <button onClick={() => navigate('/ai', { state: { openSidebar: true } })} className='rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-cyan-500/20 transition-transform duration-200 hover:-translate-y-0.5 hover:opacity-95'>
             Start creating now
           </button>
         </div>

@@ -24,7 +24,7 @@ const Layout = () => {
       </div>
     )
   }
-    // require sign-in for everything under /layout
+    // require sign-in for everything under /ai
     if (!isSignedIn) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a]">
