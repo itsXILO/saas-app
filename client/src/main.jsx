@@ -14,42 +14,22 @@ import WriteArticle from './pages/WriteArticle.jsx'
 import ReviewResume from './pages/ReviewResume.jsx'
 
 const router = createBrowserRouter([
+  // Public homepage
+  { path: '/', element: <Home /> },
+  // Protected layout area
   {
     path: '/layout',
     element: <Layout />,
-    children: [{ index: true, element: <Dashboard /> }],
-  },
-  {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/community',
-    element: <Community />,
-  },
-  {
-    path: '/blog-titles',
-    element: <BlogTitles />,
-  },
-  {
-    path: '/generate-images',
-    element: <GenerateImages />,
-  },
-  {
-    path: '/remove-bg',
-    element: <RemoveBg />,
-  },
-  {
-    path: '/remove-objects',
-    element: <RemoveObjects />,
-  },
-  {
-    path: '/write-article',
-    element: <WriteArticle />,
-  },
-  {
-    path: '/review-resume',
-    element: <ReviewResume />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: 'community', element: <Community /> },
+      { path: 'blog-titles', element: <BlogTitles /> },
+      { path: 'generate-images', element: <GenerateImages /> },
+      { path: 'remove-bg', element: <RemoveBg /> },
+      { path: 'remove-objects', element: <RemoveObjects /> },
+      { path: 'write-article', element: <WriteArticle /> },
+      { path: 'review-resume', element: <ReviewResume /> },
+    ],
   },
 ])
 

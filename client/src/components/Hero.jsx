@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Hero = () => {
+  const navigate = useNavigate()
   return (
     <div className='relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat px-4 sm:px-20 xl:px-32'>
       <div className='absolute inset-0 bg-slate-950/55' />
@@ -18,11 +20,8 @@ const Hero = () => {
         </p>
 
         <div className='mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row'>
-          <button className='rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-cyan-500/20 transition-transform duration-200 hover:-translate-y-0.5 hover:opacity-95'>
+          <button onClick={() => navigate('/layout', { state: { openSidebar: true } })} className='rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-cyan-500/20 transition-transform duration-200 hover:-translate-y-0.5 hover:opacity-95'>
             Start creating now
-          </button>
-          <button className='rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/10'>
-            Watch tutorial
           </button>
         </div>
       </div>
