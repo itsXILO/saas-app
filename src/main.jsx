@@ -16,9 +16,9 @@ import ReviewResume from './pages/ReviewResume.jsx'
 const router = createBrowserRouter([
   // Public homepage
   { path: '/', element: <Home /> },
-  // Protected layout area
+  // Protected app area
   {
-    path: '/layout',
+    path: '/ai',
     element: <Layout />,
     children: [
       { index: true, element: <Dashboard /> },

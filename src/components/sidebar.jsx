@@ -7,14 +7,14 @@ import { House, SquarePen, Hash, Image, Eraser, Scissors, FileText, Users } from
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
-  { to: '/layout', label: 'Dashboard', Icon: House },
-  { to: '/layout/write-article', label: 'Write Article', Icon: SquarePen },
-  { to: '/layout/blog-titles', label: 'Blog Titles', Icon: Hash },
-  { to: '/layout/generate-images', label: 'Generate Images', Icon: Image },
-  { to: '/layout/remove-bg', label: 'Remove Background', Icon: Eraser },
-  { to: '/layout/remove-objects', label: 'Remove Object', Icon: Scissors },
-  { to: '/layout/review-resume', label: 'Review Resume', Icon: FileText },
-  { to: '/layout/community', label: 'Community', Icon: Users },
+  { to: '/ai', label: 'Dashboard', Icon: House },
+  { to: '/ai/write-article', label: 'Write Article', Icon: SquarePen },
+  { to: '/ai/blog-titles', label: 'Blog Titles', Icon: Hash },
+  { to: '/ai/generate-images', label: 'Generate Images', Icon: Image },
+  { to: '/ai/remove-bg', label: 'Remove Background', Icon: Eraser },
+  { to: '/ai/remove-objects', label: 'Remove Object', Icon: Scissors },
+  { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText },
+  { to: '/ai/community', label: 'Community', Icon: Users },
 ]
 
 const Sidebar = ({ sidebar, setSidebar }) => {

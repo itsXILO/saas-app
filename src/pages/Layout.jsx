@@ -6,8 +6,19 @@ import { useUser, SignInButton } from '@clerk/react'
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 640)
   const { isSignedIn, isLoaded } = useUser()
   const location = useLocation()
+  const sidebarVisible = sidebarOpen || isDesktop
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 640)
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (location?.state && location.state.openSidebar) {
@@ -24,7 +35,7 @@ const Layout = () => {
       </div>
     )
   }
-    // require sign-in for everything under /layout
+    // require sign-in for everything under /ai
     if (!isSignedIn) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a]">
@@ -40,9 +51,12 @@ const Layout = () => {
 
   return (
     <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] text-white min-h-screen">
-      <Navbar onMenuToggle={() => setSidebarOpen((s) => !s)} />
+      <Navbar
+        onMenuToggle={() => setSidebarOpen((s) => !s)}
+        sidebarOpen={sidebarVisible}
+      />
       <div className="flex-1 w-full flex flex-col sm:flex-row">
-        <Sidebar sidebar={sidebarOpen} setSidebar={setSidebarOpen} />
+        <Sidebar sidebar={sidebarVisible} setSidebar={setSidebarOpen} />
         <main className="flex-1 w-full pt-20 sm:pl-64">
           <div className="p-6">
             <Outlet />
