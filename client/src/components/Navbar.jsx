@@ -9,7 +9,7 @@ import {
   UserButton,
 } from '@clerk/react'
 
-const Navbar = ({ onMenuToggle }) => {
+const Navbar = ({ onMenuToggle, sidebarOpen }) => {
   const navigate = useNavigate()
   return (
     <div className='fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-40'>
@@ -20,12 +20,14 @@ const Navbar = ({ onMenuToggle }) => {
           </svg>
         </button>
 
-        <img
-          src={logo}
-          alt="logo"
-          className="w-32 sm:w-44 cursor-pointer"
-          onClick={() => navigate('/')}
-        />
+        {!sidebarOpen && (
+          <img
+            src={logo}
+            alt="logo"
+            className="w-32 sm:w-44 cursor-pointer"
+            onClick={() => navigate('/')}
+          />
+        )}
       </div>
 
       <div className="flex items-center gap-3">
