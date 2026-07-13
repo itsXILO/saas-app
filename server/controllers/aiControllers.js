@@ -19,7 +19,7 @@ export const generateArticle = async (req, res) => {
     if(plan !== 'premium' && free_usage >= 10){
     return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
 }
-
+//gemini API call to generate article
 const response = await AI.chat.completions.create({
     model: "gemini-3.5-flash",
     messages: [
