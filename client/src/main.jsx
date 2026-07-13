@@ -1,4 +1,5 @@
-import { ClerkProvider } from '@clerk/react'
+import { ClerkProvider, useAuth } from '@clerk/react'
+import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -12,6 +13,20 @@ import RemoveBg from './pages/RemoveBg.jsx'
 import RemoveObjects from './pages/RemoveObjects.jsx'
 import WriteArticle from './pages/WriteArticle.jsx'
 import ReviewResume from './pages/ReviewResume.jsx'
+
+function TokenFetcher() {
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    getToken().then((token) => {
+      if (token) {
+        console.log('Clerk Session Token:', token);
+      }
+    });
+  }, [getToken]);
+
+  return null;
+}
 
 const router = createBrowserRouter([
   // Public homepage
@@ -35,6 +50,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+    <TokenFetcher />
     <RouterProvider router={router} />
   </ClerkProvider>
 )
