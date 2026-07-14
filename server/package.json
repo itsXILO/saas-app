@@ -5,8 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +20,7 @@
     "express": "^5.2.1",
     "multer": "^2.2.0",
     "nodemon": "^3.1.14",
-    "openai": "^6.46.0"
+    "openai": "^6.46.0",
+    "pdf-parse": "^2.4.5"
   }
 }

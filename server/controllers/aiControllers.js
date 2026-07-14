@@ -3,7 +3,8 @@ import sql from "../configs/db.js";
 import { clerkClient } from "@clerk/express";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
-
+import fs from "fs";
+import { PDFParse } from "pdf-parse";
 
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -109,6 +110,55 @@ res.json({ success: true, content })
 
 //===============================
 
+export const generateImage = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const { prompt, publish } = req.body;
+    const plan = req.plan;
+    const free_usage = req.free_usage;
+
+    if(plan !== 'premium' && free_usage >= 10){
+    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+}
+
+//clipdrop API call to generate image
+const formData = new FormData();
+formData.append('prompt', prompt);
+
+const response = await axios.post("https://clipdrop-api.co/text-to-image/v1", formData, {
+  headers: {
+    'x-api-key': process.env.CLIPDROP_API_KEY,
+  },
+  responseType: 'arraybuffer',
+})
+
+const base64Image = `data:image/png;base64,${Buffer.from(response.data, 'binary').toString('base64')}`;
+
+const { secure_url } = await cloudinary.uploader.upload(base64Image);
+
+//store output in the database
+await sql`INSERT INTO creations (user_id, prompt, content, type)
+VALUES (${userId}, ${prompt}, ${secure_url}, 'image')`;
+
+if (plan !== 'premium') {
+    await clerkClient.users.updateUserMetadata(userId, {
+        privateMetadata: {
+            free_usage: free_usage + 1
+        }
+    })
+}
+
+res.json({ success: true, content: secure_url })
+
+
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+//===============================
+
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
@@ -155,7 +205,7 @@ res.json({ success: true, content: secure_url })
 export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { object } = req.body();
+    const { object } = req.body;
     const { prompt, publish } = req.body;
     const plan = req.plan;
 
@@ -181,9 +231,55 @@ await sql`
 res.json({ success: true, content: imageUrl })
 
 
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+//====================================================
+
+export const resumeReview = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const resume = req.file;
+    const plan = req.plan;
 
 
-res.json({ success: true, content: secure_url })
+    if(plan !== 'premium'){
+    return res.json({ success: false, message: "only for premium users"})
+}
+//check if file is >5mb
+if(resume.size > 5 * 1024 * 1024){
+    return res.json({success: false, message: "Resume file size exceeds allowed size (5MB)."})
+}
+
+const dataBuffer = fs.readFileSync(resume.path);
+const parser = new PDFParse(dataBuffer);
+await parser.load();
+const pdfData = { text: await parser.getText() };
+
+//gemini API call to review resume
+const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improvement. Resume Content:\n\n${pdfData.text}`
+
+const response = await AI.chat.completions.create({
+  model: "gemini-3.5-flash",
+  messages: [
+    { role: "user", content: "Write a haiku about recursion in programming." }
+  ],
+  temperature: 0.7,
+  max_tokens: 1000,
+});
+
+const content = response.choices[0].message.content;
+
+
+await sql`
+  INSERT INTO creations (user_id, prompt, content, type)
+  VALUES (${userId}, 'Review the uploaded resume' ,${content}, 'text')
+`;
+
+res.json({ success: true, content})
 
 
   } catch (error) {
