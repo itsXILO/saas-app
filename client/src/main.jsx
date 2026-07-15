@@ -1,4 +1,5 @@
 import { ClerkProvider, useAuth } from '@clerk/react'
+import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
     <TokenFetcher />
+    <Toaster />
     <RouterProvider router={router} />
   </ClerkProvider>
 )
