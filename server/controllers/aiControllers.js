@@ -239,10 +239,10 @@ res.json({ success: true, content: imageUrl })
 
 //====================================================
 
-export const resumeReview = async (req, res) => {
+export const summarizePdf = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const resume = req.file;
+    const document = req.file;
     const plan = req.plan;
 
 
@@ -250,22 +250,22 @@ export const resumeReview = async (req, res) => {
     return res.json({ success: false, message: "only for premium users"})
 }
 //check if file is >5mb
-if(resume.size > 5 * 1024 * 1024){
-    return res.json({success: false, message: "Resume file size exceeds allowed size (5MB)."})
+if(document.size > 5 * 1024 * 1024){
+    return res.json({success: false, message: "Document file size exceeds allowed size (5MB)."})
 }
 
-const dataBuffer = fs.readFileSync(resume.path);
+const dataBuffer = fs.readFileSync(document.path);
 const parser = new PDFParse(dataBuffer);
 await parser.load();
 const pdfData = { text: await parser.getText() };
 
-//gemini API call to review resume
-const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improvement. Resume Content:\n\n${pdfData.text}`
+//gemini API call to summarize document
+const prompt = `Summarize the following document concisely. Highlight key points, main ideas, and any important details. Document Content:\n\n${pdfData.text}`
 
 const response = await AI.chat.completions.create({
   model: "gemini-3.5-flash",
   messages: [
-    { role: "user", content: "Write a haiku about recursion in programming." }
+    { role: "user", content: prompt }
   ],
   temperature: 0.7,
   max_tokens: 1000,
@@ -276,7 +276,7 @@ const content = response.choices[0].message.content;
 
 await sql`
   INSERT INTO creations (user_id, prompt, content, type)
-  VALUES (${userId}, 'Review the uploaded resume' ,${content}, 'text')
+  VALUES (${userId}, 'Summarized the uploaded document' ,${content}, 'text')
 `;
 
 res.json({ success: true, content})
