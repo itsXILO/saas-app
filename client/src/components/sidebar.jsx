@@ -13,7 +13,7 @@ const navItems = [
   { to: '/ai/generate-images', label: 'Generate Images', Icon: Image },
   { to: '/ai/remove-bg', label: 'Remove Background', Icon: Eraser },
   { to: '/ai/remove-objects', label: 'Remove Object', Icon: Scissors },
-  { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText },
+  { to: '/ai/summarize-pdf', label: 'Summarize Document', Icon: FileText },
   { to: '/ai/community', label: 'Community', Icon: Users },
 ]
 

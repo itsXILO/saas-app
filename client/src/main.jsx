@@ -12,7 +12,7 @@ import GenerateImages from './pages/GenerateImages.jsx'
 import RemoveBg from './pages/RemoveBg.jsx'
 import RemoveObjects from './pages/RemoveObjects.jsx'
 import WriteArticle from './pages/WriteArticle.jsx'
-import ReviewResume from './pages/ReviewResume.jsx'
+import SummarizePdf from './pages/SummarizePdf.jsx'
 
 function TokenFetcher() {
   const { getToken } = useAuth();
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       { path: 'remove-bg', element: <RemoveBg /> },
       { path: 'remove-objects', element: <RemoveObjects /> },
       { path: 'write-article', element: <WriteArticle /> },
-      { path: 'review-resume', element: <ReviewResume /> },
+      { path: 'summarize-pdf', element: <SummarizePdf /> },
     ],
   },
 ])
