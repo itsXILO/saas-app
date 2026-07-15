@@ -24,7 +24,7 @@ export const generateArticle = async (req, res) => {
 }
 //gemini API call to generate article
 const response = await AI.chat.completions.create({
-    model: "gemini-3.5-flash",
+    model: "gemini-3.1-flash-lite",
     messages: [
         {
             role: "user",
@@ -39,8 +39,12 @@ const response = await AI.chat.completions.create({
 const content = response.choices[0].message.content;
 
 //store output in the database
-await sql`INSERT INTO creations (user_id, prompt, content, type)
-VALUES (${userId}, ${prompt}, ${content}, 'article')`;
+try {
+    await sql`INSERT INTO creations (user_id, prompt, content, type)
+    VALUES (${userId}, ${prompt}, ${content}, 'article')`;
+} catch (dbError) {
+    console.error("Failed to save to database:", dbError);
+}
 
 if (plan !== 'premium') {
     await clerkClient.users.updateUserMetadata(userId, {
@@ -73,7 +77,7 @@ export const generateBlogTitle = async (req, res) => {
 }
 //gemini API call to generate article
 const response = await AI.chat.completions.create({
-    model: "gemini-3.5-flash",
+    model: "gemini-3.1-flash-lite",
     messages: [
         {
             role: "user",
@@ -88,8 +92,12 @@ const response = await AI.chat.completions.create({
 const content = response.choices[0].message.content;
 
 //store output in the database
-await sql`INSERT INTO creations (user_id, prompt, content, type)
-VALUES (${userId}, ${prompt}, ${content}, 'blog-title')`;
+try {
+    await sql`INSERT INTO creations (user_id, prompt, content, type)
+    VALUES (${userId}, ${prompt}, ${content}, 'blog-title')`;
+} catch (dbError) {
+    console.error("Failed to save to database:", dbError);
+}
 
 if (plan !== 'premium') {
     await clerkClient.users.updateUserMetadata(userId, {
@@ -263,7 +271,7 @@ const pdfData = { text: await parser.getText() };
 const prompt = `Summarize the following document concisely. Highlight key points, main ideas, and any important details. Document Content:\n\n${pdfData.text}`
 
 const response = await AI.chat.completions.create({
-  model: "gemini-3.5-flash",
+  model: "gemini-3.1-flash-lite",
   messages: [
     { role: "user", content: prompt }
   ],
