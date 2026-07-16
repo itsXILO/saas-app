@@ -3,7 +3,7 @@ import sql from "../configs/db.js";
 import { clerkClient } from "@clerk/express";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
-import { PDFParse } from "pdf-parse";
+import pdfParse from "pdf-parse";
 
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -277,10 +277,7 @@ if(req.file.size > 5 * 1024 * 1024){
 }
 
 const uint8Array = new Uint8Array(req.file.buffer);
-const parser = new PDFParse(uint8Array);
-await parser.load();
-const result = await parser.getText();
-const pdfData = result.text;
+const pdfData = await pdfParse(uint8Array).then(result => result.text);
 
 if (!pdfData || !pdfData.trim()) {
     return res.json({ success: false, message: "Could not extract text from the document. Please try a different file." })
