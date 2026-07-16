@@ -145,8 +145,8 @@ const base64Image = `data:image/png;base64,${Buffer.from(response.data, 'binary'
 const { secure_url } = await cloudinary.uploader.upload(base64Image);
 
 //store output in the database
-await sql`INSERT INTO creations (user_id, prompt, content, type)
-VALUES (${userId}, ${prompt}, ${secure_url}, 'image')`;
+await sql`INSERT INTO creations (user_id, prompt, content, type, publish)
+VALUES (${userId}, ${prompt}, ${secure_url}, 'image', ${publish || false})`;
 
 if (plan !== 'premium') {
     await clerkClient.users.updateUserMetadata(userId, {
@@ -171,6 +171,7 @@ export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
     const {path} = req.file;
+    const { publish } = req.body;
     const plan = req.plan;
     const bg_removal_usage = req.bg_removal_usage;
 
@@ -194,8 +195,8 @@ const { secure_url } = await cloudinary.uploader.upload(path, {
 
 
 //store output in the database
-await sql`INSERT INTO creations (user_id, prompt, content, type)
-VALUES (${userId}, 'Remove background from image', ${secure_url}, 'image')`;
+await sql`INSERT INTO creations (user_id, prompt, content, type, publish)
+VALUES (${userId}, 'Remove background from image', ${secure_url}, 'image', ${publish || false})`;
 
 if (plan !== 'premium') {
     await clerkClient.users.updateUserMetadata(userId, {
@@ -219,7 +220,7 @@ res.json({ success: true, content: secure_url })
 export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { object } = req.body;
+    const { object, publish } = req.body;
     const {path} = req.file;
     const plan = req.plan;
     const obj_removal_usage = req.obj_removal_usage;
@@ -239,8 +240,8 @@ const imageUrl = cloudinary.url(public_id, {
 })
 
 await sql`
-  INSERT INTO creations (user_id, prompt, content, type)
-  VALUES (${userId}, ${`Removed ${object} from image`}, ${imageUrl}, 'image')
+  INSERT INTO creations (user_id, prompt, content, type, publish)
+  VALUES (${userId}, ${`Removed ${object} from image`}, ${imageUrl}, 'image', ${publish || false})
 `;
 
 if (plan !== 'premium') {

@@ -10,6 +10,7 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 const RemoveBg = () => {
 
   const [input, setInput] = useState(null)
+  const [publish, setPublish] = useState(false)
   const [loading, setLoading] = useState(false)
   const [content, setContent] = useState('')
 
@@ -27,6 +28,7 @@ const RemoveBg = () => {
 
       const formData = new FormData()
       formData.append('image', input)
+      formData.append('publish', publish)
 
       const { data } = await axios.post('/api/ai/remove-image-background', formData, {
         headers: { Authorization: `Bearer ${await getToken()}` }
@@ -62,6 +64,15 @@ const RemoveBg = () => {
             required
           />
           <p className='mt-2 text-xs text-gray-500'>Supported formats: PNG, JPEG, WEBP</p>
+          <label className='flex items-center gap-3 mt-6 cursor-pointer'>
+            <input
+              type="checkbox"
+              className='w-4 h-4 rounded accent-blue-500'
+              checked={publish}
+              onChange={(e) => setPublish(e.target.checked)}
+            />
+            <span className='text-sm text-slate-200'>Make this image public</span>
+          </label>
           <button
             type='submit'
             disabled={loading}

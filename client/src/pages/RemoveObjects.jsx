@@ -11,6 +11,7 @@ const RemoveObjects = () => {
 
   const [imageFile, setImageFile] = useState(null)
   const [objectName, setObjectName] = useState('')
+  const [publish, setPublish] = useState(false)
   const [loading, setLoading] = useState(false)
   const [content, setContent] = useState('')
 
@@ -29,6 +30,7 @@ const RemoveObjects = () => {
       const formData = new FormData()
       formData.append('image', imageFile)
       formData.append('object', objectName)
+      formData.append('publish', publish)
 
       const { data } = await axios.post('/api/ai/remove-image-object', formData, {
         headers: { Authorization: `Bearer ${await getToken()}` }
@@ -74,6 +76,15 @@ const RemoveObjects = () => {
             required
           />
           <p className='mt-2 text-xs text-gray-500'>Enter one object name only</p>
+          <label className='flex items-center gap-3 mt-6 cursor-pointer'>
+            <input
+              type="checkbox"
+              className='w-4 h-4 rounded accent-blue-500'
+              checked={publish}
+              onChange={(e) => setPublish(e.target.checked)}
+            />
+            <span className='text-sm text-slate-200'>Make this image public</span>
+          </label>
           <button
             type='submit'
             disabled={loading}
