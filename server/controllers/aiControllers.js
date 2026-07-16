@@ -123,10 +123,10 @@ export const generateImage = async (req, res) => {
     const { userId } = req.auth();
     const { prompt, publish } = req.body;
     const plan = req.plan;
-    const free_usage = req.free_usage;
+    const image_usage = req.image_usage;
 
-    if(plan !== 'premium' && free_usage >= 10){
-    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+    if(plan !== 'premium' && image_usage >= 3){
+    return res.json({ success: false, message: "Free image generation limit reached (3 images). Upgrade to continue."})
 }
 
 //clipdrop API call to generate image
@@ -151,7 +151,7 @@ VALUES (${userId}, ${prompt}, ${secure_url}, 'image')`;
 if (plan !== 'premium') {
     await clerkClient.users.updateUserMetadata(userId, {
         privateMetadata: {
-            free_usage: free_usage + 1
+            image_usage: image_usage + 1
         }
     })
 }
