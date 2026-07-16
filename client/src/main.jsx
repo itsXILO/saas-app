@@ -1,5 +1,4 @@
 import { ClerkProvider, useAuth } from '@clerk/react'
-import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -14,17 +13,12 @@ import RemoveBg from './pages/RemoveBg.jsx'
 import RemoveObjects from './pages/RemoveObjects.jsx'
 import WriteArticle from './pages/WriteArticle.jsx'
 import SummarizePdf from './pages/SummarizePdf.jsx'
+import { Toaster } from 'react-hot-toast'
 
 function TokenFetcher() {
-  const { getToken } = useAuth();
 
-  useEffect(() => {
-    getToken().then((token) => {
-      if (token) {
-        console.log('Clerk Session Token:', token);
-      }
-    });
-  }, [getToken]);
+
+
 
   return null;
 }
@@ -52,7 +46,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
     <TokenFetcher />
-    <Toaster />
     <RouterProvider router={router} />
   </ClerkProvider>
 )

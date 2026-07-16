@@ -1,7 +1,7 @@
 import React from 'react'
 import { useUser, useClerk } from '@clerk/react'
 import fallbackAvatar from '../assets/profile_img_1.png'
-import logo from '../assets/logo.svg'
+import logo from '../assets/logo.png'
 import { useNavigate } from 'react-router-dom'
 import { House, SquarePen, Hash, Image, Eraser, Scissors, FileText, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'

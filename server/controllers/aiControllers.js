@@ -3,7 +3,6 @@ import sql from "../configs/db.js";
 import { clerkClient } from "@clerk/express";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
 import { PDFParse } from "pdf-parse";
 
 const AI = new OpenAI({
@@ -170,7 +169,6 @@ res.json({ success: true, content: secure_url })
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const {path} = req.file;
     const { publish } = req.body;
     const plan = req.plan;
     const bg_removal_usage = req.bg_removal_usage;
@@ -183,7 +181,8 @@ export const removeImageBackground = async (req, res) => {
 //using cloudinary to remove background from image and return the secure url of the image
 
 
-const { secure_url } = await cloudinary.uploader.upload(path, {
+const fileUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+const { secure_url } = await cloudinary.uploader.upload(fileUri, {
   transformation: [
     {
       effect: 'background_removal',
@@ -221,7 +220,6 @@ export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object, publish } = req.body;
-    const {path} = req.file;
     const plan = req.plan;
     const obj_removal_usage = req.obj_removal_usage;
 
@@ -232,7 +230,7 @@ export const removeImageObject = async (req, res) => {
 //cloudinary API call to remove object from image
 
 
-const { public_id } = await cloudinary.uploader.upload(path)
+const { public_id } = await cloudinary.uploader.upload(req.file.buffer)
 
 const imageUrl = cloudinary.url(public_id, {
   transformation: [{ effect: `gen_remove:${object}` }],
@@ -266,7 +264,6 @@ res.json({ success: true, content: imageUrl })
 export const summarizePdf = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const document = req.file;
     const plan = req.plan;
     const pdf_usage = req.pdf_usage;
 
@@ -275,12 +272,11 @@ export const summarizePdf = async (req, res) => {
     return res.json({ success: false, message: "Free document summarization limit reached (3 uses). Upgrade to continue."})
 }
 //check if file is >5mb
-if(document.size > 5 * 1024 * 1024){
+if(req.file.size > 5 * 1024 * 1024){
     return res.json({success: false, message: "Document file size exceeds allowed size (5MB)."})
 }
 
-const dataBuffer = fs.readFileSync(document.path);
-const uint8Array = new Uint8Array(dataBuffer);
+const uint8Array = new Uint8Array(req.file.buffer);
 const parser = new PDFParse(uint8Array);
 await parser.load();
 const result = await parser.getText();
