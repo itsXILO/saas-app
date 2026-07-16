@@ -267,10 +267,11 @@ export const summarizePdf = async (req, res) => {
     const { userId } = req.auth();
     const document = req.file;
     const plan = req.plan;
+    const pdf_usage = req.pdf_usage;
 
 
-    if(plan !== 'premium'){
-    return res.json({ success: false, message: "only for premium users"})
+    if(plan !== 'premium' && pdf_usage >= 3){
+    return res.json({ success: false, message: "Free document summarization limit reached (3 uses). Upgrade to continue."})
 }
 //check if file is >5mb
 if(document.size > 5 * 1024 * 1024){
@@ -278,12 +279,18 @@ if(document.size > 5 * 1024 * 1024){
 }
 
 const dataBuffer = fs.readFileSync(document.path);
-const parser = new PDFParse(dataBuffer);
+const uint8Array = new Uint8Array(dataBuffer);
+const parser = new PDFParse(uint8Array);
 await parser.load();
-const pdfData = { text: await parser.getText() };
+const result = await parser.getText();
+const pdfData = result.text;
+
+if (!pdfData || !pdfData.trim()) {
+    return res.json({ success: false, message: "Could not extract text from the document. Please try a different file." })
+}
 
 //gemini API call to summarize document
-const prompt = `Summarize the following document concisely. Highlight key points, main ideas, and any important details. Document Content:\n\n${pdfData.text}`
+const prompt = `You are a document summarizer. Summarize the text below in clear, concise bullet points. Do not ask questions or request more information. Just summarize what is provided.\n\n${pdfData}`
 
 const response = await AI.chat.completions.create({
   model: "gemini-3.1-flash-lite",
@@ -301,6 +308,14 @@ await sql`
   INSERT INTO creations (user_id, prompt, content, type)
   VALUES (${userId}, 'Summarized the uploaded document' ,${content}, 'text')
 `;
+
+if (plan !== 'premium') {
+    await clerkClient.users.updateUserMetadata(userId, {
+        privateMetadata: {
+            pdf_usage: pdf_usage + 1
+        }
+    })
+}
 
 res.json({ success: true, content})
 
