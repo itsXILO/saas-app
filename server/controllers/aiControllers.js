@@ -170,19 +170,19 @@ res.json({ success: true, content: secure_url })
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const {image} = req.file;
+    const {path} = req.file;
     const plan = req.plan;
-    const free_usage = req.free_usage;
+    const bg_removal_usage = req.bg_removal_usage;
 
-    if(plan !== 'premium' && free_usage >= 10){
-    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+    if(plan !== 'premium' && bg_removal_usage >= 10){
+    return res.json({ success: false, message: "Free background removal limit reached (10 uses). Upgrade to continue."})
 }
 
 
 //using cloudinary to remove background from image and return the secure url of the image
 
 
-const { secure_url } = await cloudinary.uploader.upload(image.path, {
+const { secure_url } = await cloudinary.uploader.upload(path, {
   transformation: [
     {
       effect: 'background_removal',
@@ -197,7 +197,13 @@ const { secure_url } = await cloudinary.uploader.upload(image.path, {
 await sql`INSERT INTO creations (user_id, prompt, content, type)
 VALUES (${userId}, 'Remove background from image', ${secure_url}, 'image')`;
 
-
+if (plan !== 'premium') {
+    await clerkClient.users.updateUserMetadata(userId, {
+        privateMetadata: {
+            bg_removal_usage: bg_removal_usage + 1
+        }
+    })
+}
 
 res.json({ success: true, content: secure_url })
 
