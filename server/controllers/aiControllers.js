@@ -220,17 +220,18 @@ export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object } = req.body;
-    const { prompt, publish } = req.body;
+    const {path} = req.file;
     const plan = req.plan;
+    const obj_removal_usage = req.obj_removal_usage;
 
 
-    if(plan !== 'premium' && free_usage >= 10){
-    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+    if(plan !== 'premium' && obj_removal_usage >= 5){
+    return res.json({ success: false, message: "Free object removal limit reached (5 uses). Upgrade to continue."})
 }
 //cloudinary API call to remove object from image
 
 
-const { public_id } = await cloudinary.uploader.upload(image.path)
+const { public_id } = await cloudinary.uploader.upload(path)
 
 const imageUrl = cloudinary.url(public_id, {
   transformation: [{ effect: `gen_remove:${object}` }],
@@ -241,6 +242,14 @@ await sql`
   INSERT INTO creations (user_id, prompt, content, type)
   VALUES (${userId}, ${`Removed ${object} from image`}, ${imageUrl}, 'image')
 `;
+
+if (plan !== 'premium') {
+    await clerkClient.users.updateUserMetadata(userId, {
+        privateMetadata: {
+            obj_removal_usage: obj_removal_usage + 1
+        }
+    })
+}
 
 res.json({ success: true, content: imageUrl })
 

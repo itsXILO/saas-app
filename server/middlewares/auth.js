@@ -21,6 +21,7 @@ export const auth = async (req, res, next) => {
 
   req.image_usage = user.privateMetadata.image_usage || 0;
   req.bg_removal_usage = user.privateMetadata.bg_removal_usage || 0;
+  req.obj_removal_usage = user.privateMetadata.obj_removal_usage || 0;
   req.plan = hasPremiumPlan ? "premium" : "free";
   next();
   } catch (error) {
