@@ -230,7 +230,8 @@ export const removeImageObject = async (req, res) => {
 //cloudinary API call to remove object from image
 
 
-const { public_id } = await cloudinary.uploader.upload(req.file.buffer)
+const fileUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+const { public_id } = await cloudinary.uploader.upload(fileUri)
 
 const imageUrl = cloudinary.url(public_id, {
   transformation: [{ effect: `gen_remove:${object}` }],
@@ -282,6 +283,8 @@ const pdfData = await new Promise((resolve, reject) => {
   parser.on("pdfParser_dataError", err => reject(err.parserError));
   parser.on("pdfParser_dataReady", () => {
     const text = parser.getRawTextContent();
+    console.log("PDF extracted text length:", text.length);
+    console.log("PDF extracted text preview:", text.substring(0, 200));
     resolve(text);
   });
   parser.parseBuffer(uint8Array);
