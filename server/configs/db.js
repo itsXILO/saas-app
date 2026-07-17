@@ -28,7 +28,8 @@ async function sql(strings, ...values) {
         'Neon-Connection-String': process.env.DATABASE_URL,
         'Host': NEON_HOST
       },
-      timeout: 30000
+      timeout: 30000,
+      rejectUnauthorized: false
     }, (res) => {
       let data = '';
       res.on('data', c => data += c);

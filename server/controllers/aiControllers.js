@@ -17,9 +17,10 @@ export const generateArticle = async (req, res) => {
     const { prompt, length } = req.body;
     const plan = req.plan;
     const free_usage = req.free_usage;
+    const remaining = plan === 'premium' ? null : 10 - free_usage;
 
     if(plan !== 'premium' && free_usage >= 10){
-    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+    return res.json({ success: false, message: "Free limit reached. Upgrade to premium to continue generating articles.", remaining: 0 })
 }
 //gemini API call to generate article
 const response = await AI.chat.completions.create({
@@ -53,7 +54,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content })
+res.json({ success: true, content, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {
@@ -70,9 +71,10 @@ export const generateBlogTitle = async (req, res) => {
     const { prompt, length } = req.body;
     const plan = req.plan;
     const free_usage = req.free_usage;
+    const remaining = plan === 'premium' ? null : 10 - free_usage;
 
     if(plan !== 'premium' && free_usage >= 10){
-    return res.json({ success: false, message: "Limit reached. Upgrade to continue."})
+    return res.json({ success: false, message: "Free limit reached. Upgrade to premium to continue generating blog titles.", remaining: 0 })
 }
 //gemini API call to generate article
 const response = await AI.chat.completions.create({
@@ -106,7 +108,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content })
+res.json({ success: true, content, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {
@@ -123,9 +125,10 @@ export const generateImage = async (req, res) => {
     const { prompt, publish } = req.body;
     const plan = req.plan;
     const image_usage = req.image_usage;
+    const remaining = plan === 'premium' ? null : 3 - image_usage;
 
     if(plan !== 'premium' && image_usage >= 3){
-    return res.json({ success: false, message: "Free image generation limit reached (3 images). Upgrade to continue."})
+    return res.json({ success: false, message: "Free image generation limit reached (0/3 remaining). Upgrade to premium for unlimited images.", remaining: 0 })
 }
 
 //clipdrop API call to generate image
@@ -155,7 +158,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content: secure_url })
+res.json({ success: true, content: secure_url, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {
@@ -172,9 +175,10 @@ export const removeImageBackground = async (req, res) => {
     const { publish } = req.body;
     const plan = req.plan;
     const bg_removal_usage = req.bg_removal_usage;
+    const remaining = plan === 'premium' ? null : 10 - bg_removal_usage;
 
     if(plan !== 'premium' && bg_removal_usage >= 10){
-    return res.json({ success: false, message: "Free background removal limit reached (10 uses). Upgrade to continue."})
+    return res.json({ success: false, message: "Free background removal limit reached (0/10 remaining). Upgrade to premium for unlimited removals.", remaining: 0 })
 }
 
 
@@ -205,7 +209,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content: secure_url })
+res.json({ success: true, content: secure_url, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {
@@ -222,10 +226,11 @@ export const removeImageObject = async (req, res) => {
     const { object, publish } = req.body;
     const plan = req.plan;
     const obj_removal_usage = req.obj_removal_usage;
+    const remaining = plan === 'premium' ? null : 5 - obj_removal_usage;
 
 
     if(plan !== 'premium' && obj_removal_usage >= 5){
-    return res.json({ success: false, message: "Free object removal limit reached (5 uses). Upgrade to continue."})
+    return res.json({ success: false, message: "Free object removal limit reached (0/5 remaining). Upgrade to premium for unlimited removals.", remaining: 0 })
 }
 //cloudinary API call to remove object from image
 
@@ -251,7 +256,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content: imageUrl })
+res.json({ success: true, content: imageUrl, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {
@@ -267,10 +272,11 @@ export const summarizePdf = async (req, res) => {
     const { userId } = req.auth();
     const plan = req.plan;
     const pdf_usage = req.pdf_usage;
+    const remaining = plan === 'premium' ? null : 3 - pdf_usage;
 
 
     if(plan !== 'premium' && pdf_usage >= 3){
-    return res.json({ success: false, message: "Free document summarization limit reached (3 uses). Upgrade to continue."})
+    return res.json({ success: false, message: "Free document summarization limit reached (0/3 remaining). Upgrade to premium for unlimited summaries.", remaining: 0 })
 }
 //check if file is >5mb
 if(req.file.size > 5 * 1024 * 1024){
@@ -322,7 +328,7 @@ if (plan !== 'premium') {
     })
 }
 
-res.json({ success: true, content})
+res.json({ success: true, content, remaining: plan === 'premium' ? null : remaining - 1 })
 
 
   } catch (error) {

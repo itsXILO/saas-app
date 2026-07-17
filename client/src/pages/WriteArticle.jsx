@@ -20,6 +20,7 @@ const WriteArticle = () => {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [content, setContent] = useState('')
+  const [remaining, setRemaining] = useState(null)
 
   const { getToken } = useAuth()
 
@@ -36,8 +37,14 @@ const WriteArticle = () => {
 
       if (data.success) {
         setContent(data.content)
+        if (data.remaining !== undefined && data.remaining !== null) {
+          setRemaining(data.remaining)
+        }
       } else {
         toast.error(data.message)
+        if (data.remaining !== undefined) {
+          setRemaining(data.remaining)
+        }
       }
     } catch (error) {
       toast.error(error.message)
@@ -92,6 +99,13 @@ const WriteArticle = () => {
               </>
             )}
           </button>
+          {remaining !== null && (
+            <p className={`text-xs mt-2 text-center ${remaining === 0 ? 'text-red-400' : 'text-slate-400'}`}>
+              {remaining === 0
+                ? 'Free limit reached. Upgrade to continue.'
+                : `${remaining} free ${remaining === 1 ? 'try' : 'tries'} remaining`}
+            </p>
+          )}
         </div>
       </form>
       {/* Right col */}
