@@ -1,7 +1,5 @@
 # CreatorHub - AI-Powered Content Creation Platform
 
-![CreatorHub](./client/public/gradientBackground.png)
-
 A full-stack SaaS application that empowers content creators with AI-powered tools for article writing, blog title generation, image creation, background removal, object removal, and PDF summarization. Built with a freemium model, community features, and subscription-based monetization.
 
 **Live Demo:** [https://creatorhub-ebon.vercel.app/](https://creatorhub-ebon.vercel.app/)
