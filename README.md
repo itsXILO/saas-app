@@ -6,17 +6,7 @@ A full-stack SaaS application that empowers content creators with AI-powered too
 
 ---
 
-## Table of Contents
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
-- [Authentication & Authorization](#authentication--authorization)
-- [Deployment](#deployment)
 
 ---
 
