@@ -27,11 +27,11 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE_OUT }}
-      className={`fixed z-50 w-full flex justify-between items-center py-3 px-4 sm:px-20 xl:px-40 transition-colors duration-300 ${scrolled ? 'border-b border-white/10 bg-slate-950/60 backdrop-blur-md' : 'bg-transparent border-b border-transparent'}`}
+      className={`fixed z-50 w-full flex justify-between items-center px-3 sm:px-20 xl:px-40 transition-all duration-300 ${scrolled ? 'py-2' : 'py-3 sm:py-4'}`}
     >
       <div className="flex items-center">
         <button onClick={onMenuToggle} className="sm:hidden mr-3">
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className={`transition-all duration-300 ${scrolled ? 'w-5 h-5' : 'w-6 h-6'}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </button>
@@ -40,22 +40,22 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
           <img
             src={logo}
             alt="logo"
-            className="w-32 sm:w-44 cursor-pointer"
+            className={`cursor-pointer transition-all duration-300 ${scrolled ? 'w-20 sm:w-32' : 'w-24 sm:w-44'}`}
             onClick={() => navigate('/')}
           />
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <Show when="signed-out">
           <SignInButton mode="modal">
-            <button className='flex items-center gap-2 rounded-full text-sm cursor-pointer border border-white/20 text-white px-5 py-2.5 transition-all duration-300 hover:border-white/40 hover:bg-white/5 hover:shadow-lg hover:shadow-primary/20'>
+            <button className={`flex items-center gap-2 rounded-full cursor-pointer border border-white/20 text-white transition-all duration-300 hover:border-white/40 hover:bg-white/5 hover:shadow-lg hover:shadow-primary/20 ${scrolled ? 'px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm' : 'px-3.5 py-2 text-xs sm:px-5 sm:py-2.5 sm:text-sm'}`}>
               Sign in
             </button>
           </SignInButton>
           <SignUpButton mode="modal">
-            <button className='flex items-center gap-2 rounded-full text-sm cursor-pointer bg-primary text-white px-5 py-2.5 transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:opacity-95'>
-              Sign up <ArrowRight className='w-4 h-4' />
+            <button className={`flex items-center gap-2 rounded-full cursor-pointer bg-primary text-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:opacity-95 ${scrolled ? 'px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm' : 'px-3.5 py-2 text-xs sm:px-5 sm:py-2.5 sm:text-sm'}`}>
+              Sign up <ArrowRight className='w-3.5 h-3.5 sm:w-4 sm:h-4' />
             </button>
           </SignUpButton>
         </Show>
