@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'motion/react'
+import { EASE_OUT } from '../lib/motion.js'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/sidebar'
 import { useUser, SignInButton } from '@clerk/react'
@@ -50,16 +52,37 @@ const Layout = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] text-white min-h-screen">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] text-white">
+      <motion.div
+        className="pointer-events-none absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-[120px]"
+        animate={{ x: [0, 50, -30, 0], y: [0, 30, -20, 0], scale: [1, 1.1, 0.95, 1] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="pointer-events-none absolute bottom-0 right-0 h-[380px] w-[380px] rounded-full bg-cyan-500/15 blur-[120px]"
+        animate={{ x: [0, -40, 25, 0], y: [0, -25, 25, 0], scale: [1, 0.94, 1.06, 1] }}
+        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
       <Navbar
         onMenuToggle={() => setSidebarOpen((s) => !s)}
         sidebarOpen={sidebarVisible}
       />
-      <div className="flex-1 w-full flex flex-col sm:flex-row">
+      <div className="relative flex-1 w-full flex flex-col sm:flex-row">
         <Sidebar sidebar={sidebarVisible} setSidebar={setSidebarOpen} />
         <main className="flex-1 w-full pt-20 sm:pl-64">
           <div className="p-6">
-            <Outlet />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3, ease: EASE_OUT }}
+              >
+                <Outlet />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </main>
       </div>

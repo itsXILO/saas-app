@@ -3,6 +3,7 @@ import { useUser, useClerk } from '@clerk/react'
 import fallbackAvatar from '../assets/profile_img_1.png'
 import logo from '../assets/logo.png'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { House, SquarePen, Hash, Image, Eraser, Scissors, FileText, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
@@ -58,9 +59,21 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               <li key={to}>
                 <NavLink
                   to={to}
-                  className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded text-sm ${isActive ? 'bg-white/5 text-white' : 'text-slate-300 hover:bg-white/5'}`}>
-                  <Icon className="w-4 h-4 text-slate-300" />
-                  <span className="font-medium">{label}</span>
+                  className={({ isActive }) => `group relative flex items-center gap-3 px-3 py-2 rounded text-sm ${isActive ? 'text-white' : 'text-slate-300 hover:text-white'}`}
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && (
+                        <motion.span
+                          layoutId="sidebar-active"
+                          className="absolute inset-0 rounded-md border border-primary/30 bg-gradient-to-r from-primary/30 to-transparent"
+                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <Icon className="relative w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                      <span className="relative font-medium">{label}</span>
+                    </>
+                  )}
                 </NavLink>
               </li>
             ))}
