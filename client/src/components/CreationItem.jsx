@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
 import { Globe, Lock } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
+import { EASE_OUT } from '../lib/motion.js'
 
 const CreationItem = ({item}) => {
 
     const [expanded, setExpanded] = useState(false)
 
   return (
-    <div onClick={() => setExpanded(!expanded)} className='p-4 max-w-5xl text-sm bg-slate-800 border border-white/5 rounded-lg cursor-pointer text-white'>
+    <motion.div
+      layout
+      onClick={() => setExpanded(!expanded)}
+      className='p-4 max-w-5xl text-sm bg-slate-800 border border-white/5 rounded-lg cursor-pointer text-white transition-colors hover:border-primary/30'
+    >
       <div className='flex justify-between items-center gap-4'>
         <div className='flex-1'>
           <div className='flex items-center gap-2'>
@@ -26,27 +32,34 @@ const CreationItem = ({item}) => {
           {item.type}
         </button>
       </div>
-      {expanded && (
-  <div>
-    {item.type === 'image' ? (
-      <img 
-        src={item.content} 
-        alt={item.alt || 'content image'} 
-        className="mt-3 w-full max-w-md" 
-      />
-    ) : (
-      <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-200">
-        <div className='reset-tw'>
-        <Markdown>{item.content}</Markdown>
-        </div>
-      </div>
-    )}
-  </div>
-)}
-
-    </div>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE_OUT }}
+            className="overflow-hidden"
+          >
+            {item.type === 'image' ? (
+              <img
+                src={item.content}
+                alt={item.alt || 'content image'}
+                className="mt-3 w-full max-w-md rounded-lg"
+              />
+            ) : (
+              <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-200">
+                <div className='reset-tw'>
+                  <Markdown>{item.content}</Markdown>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   )
 }
-
 
 export default CreationItem
