@@ -1,3 +1,6 @@
+import { motion } from 'motion/react'
+import { fadeUp, stagger, whileInView } from '../lib/motion.js'
+
 const Testimonial = () => {
 const testimonials = [
   { text: "The AI image generator saved me hours of design work. The quality is incredible.", name: "Sarah Chen", role: "Frontend engineer", image: "https://ui-avatars.com/api/?name=Sarah+Chen&background=6366f1&color=fff&size=128" },
@@ -67,17 +70,21 @@ const testimonials = [
             <section className="bg-[#FAFAFA] py-16 px-4">
                 <div className="max-w-6xl mx-auto">
 
-                    <div className="text-center mb-8">
-                        <div className="inline-block bg-neutral-100 border border-neutral-400 rounded-full px-4 py-1 mb-3">
+                    <motion.div
+                        variants={stagger(0.12)}
+                        {...whileInView}
+                        className="text-center mb-8"
+                    >
+                        <motion.div variants={fadeUp} className="inline-block bg-neutral-100 border border-neutral-400 rounded-full px-4 py-1 mb-3">
                             <span className="text-xs text-neutral-600">Loved by clients</span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4">
+                        </motion.div>
+                        <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4">
                             What people are saying
-                        </h2>
-                        <p className="text-neutral-600 text-sm max-w-96 mx-auto">
+                        </motion.h2>
+                        <motion.p variants={fadeUp} className="text-neutral-600 text-sm max-w-96 mx-auto">
                             Real feedback from founders, developers and teams building production-ready products.
-                        </p>
-                    </div>
+                        </motion.p>
+                    </motion.div>
 
                     <div className="space-y-6">
                         {rows.map((row, rowIndex) => (

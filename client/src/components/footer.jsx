@@ -1,9 +1,11 @@
 import React from 'react'
 import logo from '../assets/logo.png'
+import { motion } from 'motion/react'
+import { fadeUp, whileInView } from '../lib/motion.js'
 
 const Footer = () => {
   return (
-    <footer className="px-6 md:px-16 lg:px-24 xl:px-32 pt-10 w-full text-gray-300 bg-transparent">
+    <motion.footer {...whileInView} variants={fadeUp} className="px-6 md:px-16 lg:px-24 xl:px-32 pt-10 w-full text-gray-300 bg-transparent">
       <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-t border-gray-700/30 pt-8 pb-6">
         <div className="md:max-w-md">
           <div className="flex items-center gap-3">
@@ -60,7 +62,7 @@ const Footer = () => {
           <a href="https://linkedin.com" aria-label="LinkedIn" className="hover:text-white">LinkedIn</a>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   )
 }
 
