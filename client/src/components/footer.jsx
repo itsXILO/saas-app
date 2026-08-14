@@ -14,13 +14,14 @@ const Footer = () => {
           </div>
 
           <p className="mt-4 text-sm text-gray-300">
-            AI-powered tools for creators — image generation, article writing, resume review,
+            AI-powered tools for creators — image generation, article writing, PDF summarization,
             and more. Fast, secure, and privacy-minded.
           </p>
 
           <div className="mt-4 text-sm text-gray-400">
-            <div>support@creatorhub.example</div>
-            <div className="mt-1">123 Developer Lane, City, Country</div>
+            <div>support@creatorhub.in</div>
+            <div className="mt-1">123 Developer Lane</div>
+            <div className="mt-1">Mangalore, Karnataka, India</div>
           </div>
         </div>
 
@@ -30,7 +31,7 @@ const Footer = () => {
             <ul className="text-sm space-y-2 text-gray-300">
               <li><a href="/generate-images" className="hover:underline">Generate Images</a></li>
               <li><a href="/write-article" className="hover:underline">Write Article</a></li>
-              <li><a href="/review-resume" className="hover:underline">Review Resume</a></li>
+              <li><a href="/ai/summarize-pdf" className="hover:underline">Summarize PDF</a></li>
             </ul>
           </div>
 
