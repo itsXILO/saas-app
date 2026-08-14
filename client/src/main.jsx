@@ -1,6 +1,7 @@
 import { ClerkProvider, useAuth } from '@clerk/react'
 import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
+import { MotionConfig } from 'motion/react'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './pages/Layout.jsx'
@@ -45,7 +46,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
-    <TokenFetcher />
-    <RouterProvider router={router} />
+    <MotionConfig reducedMotion="user">
+      <TokenFetcher />
+      <RouterProvider router={router} />
+    </MotionConfig>
   </ClerkProvider>
 )

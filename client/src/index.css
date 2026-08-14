@@ -37,3 +37,140 @@ select {
 .cl-drawerRoot{
 	z-index:10;
 }
+
+/* ---------- Aurora / gradient blobs ---------- */
+@keyframes aurora-drift {
+	0% {
+		transform: translate(0, 0) scale(1);
+	}
+	33% {
+		transform: translate(6%, -8%) scale(1.15);
+	}
+	66% {
+		transform: translate(-7%, 6%) scale(0.95);
+	}
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+}
+
+.animate-aurora {
+	animation: aurora-drift 18s ease-in-out infinite;
+	will-change: transform;
+}
+
+@keyframes float-slow {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-18px);
+	}
+}
+
+.animate-float-slow {
+	animation: float-slow 8s ease-in-out infinite;
+	will-change: transform;
+}
+
+@keyframes float-fast {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+.animate-float-fast {
+	animation: float-fast 5s ease-in-out infinite;
+	will-change: transform;
+}
+
+/* ---------- Shimmer sweep (buttons / borders) ---------- */
+@keyframes shimmer-sweep {
+	0% {
+		transform: translateX(-150%);
+	}
+	100% {
+		transform: translateX(250%);
+	}
+}
+
+.animate-shimmer {
+	position: relative;
+	overflow: hidden;
+}
+
+.animate-shimmer::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 60%;
+	background: linear-gradient(
+		100deg,
+		transparent 20%,
+		rgba(255, 255, 255, 0.35) 50%,
+		transparent 80%
+	);
+	transform: translateX(-150%);
+	animation: shimmer-sweep 2.75s ease-in-out infinite;
+	pointer-events: none;
+}
+
+/* ---------- Animated gradient text ---------- */
+@keyframes gradient-shift {
+	0%,
+	100% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+.animate-gradient-text {
+	background-size: 200% auto;
+	animation: gradient-shift 6s ease infinite;
+}
+
+/* ---------- Custom scrollbar ---------- */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(148, 163, 184, 0.3);
+	border-radius: 9999px;
+	border: 2px solid transparent;
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(148, 163, 184, 0.5);
+	background-clip: content-box;
+	border: 2px solid transparent;
+	border-radius: 9999px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+	.animate-aurora,
+	.animate-float-slow,
+	.animate-float-fast,
+	.animate-shimmer::after,
+	.animate-gradient-text,
+	.animate-scroll,
+	.animate-scroll-reverse {
+		animation: none !important;
+	}
+}
