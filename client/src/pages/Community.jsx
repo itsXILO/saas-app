@@ -1,6 +1,8 @@
 import { useAuth, useUser } from "@clerk/react";
 import React, { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+import { motion } from "motion/react";
+import { fadeUp, stagger } from "../lib/motion.js";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -78,37 +80,58 @@ const Community = () => {
             <p>No public creations yet. Share your work with the community!</p>
           </div>
         ) : (
-          creations.map((creation) => (
-            <div
-              key={creation.id}
-              className="relative group inline-block pl-3 pt-3 w-full sm:max-w-1/2 lg:max-w-1/3"
-            >
-              <img
-                src={creation.content}
-                alt={creation.prompt}
-                className="w-full h-full object-cover rounded-lg"
-              />
-              <div className="absolute bottom-0 top-0 right-0 left-3 flex gap-2 items-end justify-end group-hover:justify-between p-3 group-hover:bg-gradient-to-b from-transparent to-black/80 text-white rounded-lg">
-                <p className="text-sm hidden group-hover:block line-clamp-2">
-                  {creation.prompt}
-                </p>
-                <div className="flex gap-1 items-center">
-                  <p>{creation.likes.length}</p>
-                  <Heart
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleLike(creation.id);
-                    }}
-                    className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${
-                      creation.likes.includes(user.id)
-                        ? "fill-red-500 text-red-600"
-                        : "text-white"
-                    }`}
+          <motion.div
+            variants={stagger(0.06)}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap"
+          >
+            {creations.map((creation) => {
+              const liked = creation.likes.includes(user.id);
+              return (
+                <motion.div
+                  key={creation.id}
+                  variants={fadeUp}
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  className="relative group inline-block pl-3 pt-3 w-full sm:max-w-1/2 lg:max-w-1/3"
+                >
+                  <img
+                    src={creation.content}
+                    alt={creation.prompt}
+                    className="w-full h-full object-cover rounded-lg"
                   />
-                </div>
-              </div>
-            </div>
-          ))
+                  <div className="absolute bottom-0 top-0 right-0 left-3 flex gap-2 items-end justify-end group-hover:justify-between p-3 group-hover:bg-gradient-to-b from-transparent to-black/80 text-white rounded-lg">
+                    <p className="text-sm hidden group-hover:block line-clamp-2">
+                      {creation.prompt}
+                    </p>
+                    <div className="flex gap-1 items-center">
+                      <p>{creation.likes.length}</p>
+                      <motion.span
+                        key={liked ? "liked" : "unliked"}
+                        initial={{ scale: 1 }}
+                        animate={{ scale: [1, 1.35, 1] }}
+                        transition={{ duration: 0.3 }}
+                        whileTap={{ scale: 1.5 }}
+                      >
+                        <Heart
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleLike(creation.id);
+                          }}
+                          className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${
+                            liked
+                              ? "fill-red-500 text-red-600"
+                              : "text-white"
+                          }`}
+                        />
+                      </motion.span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         )}
       </div>
     </div>
