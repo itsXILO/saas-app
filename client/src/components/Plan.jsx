@@ -48,7 +48,7 @@ const PricingTable = Clerk.PricingTable || Clerk.pricingTable || function Fallba
 
 const Plan = () => {
   return (
-    <div className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat px-4 sm:px-20 xl:px-32">
+    <div id="pricing" className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat px-4 sm:px-20 xl:px-32">
       <motion.div
         variants={stagger(0.12)}
         initial="hidden"

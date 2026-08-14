@@ -14,6 +14,7 @@ import {
 const Navbar = ({ onMenuToggle, sidebarOpen }) => {
   const navigate = useNavigate()
   const [scrolled, setScrolled] = React.useState(false)
+  const [hideHeader, setHideHeader] = React.useState(false)
   const { scrollY } = useScroll()
   const scale = useSpring(
     useTransform(scrollY, [0, 800], [1, 0.82]),
@@ -27,12 +28,23 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  React.useEffect(() => {
+    const pricing = document.getElementById('pricing')
+    if (!pricing) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setHideHeader(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(pricing)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <motion.div
       initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: EASE_OUT }}
-      className={`fixed z-[60] w-full flex justify-between items-center px-3 sm:px-20 xl:px-40 transition-all duration-300 ${scrolled ? 'py-2 bg-[#0b1020]/95 border-b border-white/10' : 'py-3 sm:py-4 bg-transparent border-b border-transparent'}`}
+      animate={{ y: hideHeader ? -24 : 0, opacity: hideHeader ? 0 : 1 }}
+      transition={{ duration: 0.4, ease: EASE_OUT }}
+      className={`fixed z-[60] w-full flex justify-between items-center px-3 sm:px-20 xl:px-40 transition-all duration-300 ${hideHeader ? 'pointer-events-none' : ''} ${scrolled ? 'py-2 bg-[#0b1020]/95 border-b border-white/10' : 'py-3 sm:py-4 bg-transparent border-b border-transparent'}`}
     >
       <motion.div style={{ scale, transformOrigin: 'center center' }} className="flex w-full items-center justify-between">
         <div className="flex items-center">
