@@ -27,7 +27,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE_OUT }}
-      className={`fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-40 transition-colors duration-300 ${scrolled ? 'border-b border-white/10 bg-slate-950/60 backdrop-blur-xl' : 'bg-transparent border-b border-transparent'}`}
+      className={`fixed z-50 w-full flex justify-between items-center py-3 px-4 sm:px-20 xl:px-40 transition-colors duration-300 ${scrolled ? 'border-b border-white/10 bg-slate-950/60 backdrop-blur-md' : 'bg-transparent border-b border-transparent'}`}
     >
       <div className="flex items-center">
         <button onClick={onMenuToggle} className="sm:hidden mr-3">
