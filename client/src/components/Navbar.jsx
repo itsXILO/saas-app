@@ -27,7 +27,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE_OUT }}
-      className={`fixed z-50 w-full flex justify-between items-center px-3 sm:px-20 xl:px-40 transition-all duration-300 ${scrolled ? 'py-2' : 'py-3 sm:py-4'}`}
+      className={`fixed z-[60] w-full flex justify-between items-center px-3 sm:px-20 xl:px-40 transition-all duration-300 ${scrolled ? 'py-2 bg-[#0b1020]/95 border-b border-white/10' : 'py-3 sm:py-4 bg-transparent border-b border-transparent'}`}
     >
       <div className="flex items-center">
         <button onClick={onMenuToggle} className="sm:hidden mr-3">
