@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/react';
+import { motion } from 'motion/react'
+import { fadeUp, stagger, whileInView } from '../lib/motion.js'
 
 const ImageIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -96,24 +98,44 @@ const AiTools = () => {
     const {user} = useUser();
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-100">
-        <div className='text-center mb-8'>
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        <motion.div
+            variants={stagger(0.15)}
+            {...whileInView}
+            className='text-center mb-8'
+        >
+            <motion.h2 variants={fadeUp} className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                 Powerful AI Tools for Your Needs
-            </h2>
-            <p className="mt-4 text-lg leading-6 text-gray-600">
+            </motion.h2>
+            <motion.p variants={fadeUp} className="mt-4 text-lg leading-6 text-gray-600">
                 Discover the latest AI tools to boost your productivity and creativity.
-            </p>
-        </div>
-        <div className='flex flex-wrap justify-center gap-6'>
+            </motion.p>
+        </motion.div>
+        <motion.div
+            variants={stagger(0.1, 0.15)}
+            {...whileInView}
+            className='flex flex-wrap justify-center gap-6'
+        >
             {AiToolsData.map((tool, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md p-6 w-80 hover:shadow-lg transition-shadow duration-300"
-                onClick={() => user && navigate(tool.path)}>
-                <div className={tool.color}><tool.icon /></div>
+                <motion.div
+                    key={index}
+                    variants={fadeUp}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="bg-white rounded-lg shadow-md p-6 w-80 hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300"
+                    onClick={() => user && navigate(tool.path)}
+                >
+                <motion.div
+                    whileHover={{ scale: 1.12, rotate: 6 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                    className={`${tool.color} w-fit`}
+                >
+                    <tool.icon />
+                </motion.div>
                 <h3 className="text-xl font-semibold text-gray-800">{tool.title}</h3>
                 <p className="mt-2 text-gray-600">{tool.description}</p>
-        </div>
+        </motion.div>
             ))}
-        </div>
+        </motion.div>
     </div>
   )
 }
