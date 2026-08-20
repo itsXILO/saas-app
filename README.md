@@ -2,7 +2,9 @@
 
 A full-stack SaaS application that empowers content creators with AI-powered tools for article writing, blog title generation, image creation, background removal, object removal, and PDF summarization. Built with a freemium model, community features, and subscription-based monetization.
 
-**Live Demo:** [https://creatorhub-ebon.vercel.app/](https://creatorhub-ebon.vercel.app/)
+**Live Demo (Vercel):** [https://creatorhub-ebon.vercel.app/](https://creatorhub-ebon.vercel.app/)
+
+> **EC2 Deployment:** The app is also deployed on AWS EC2 with Docker + CI/CD. The EC2 instance may not be running at all times to manage costs. When active, it's accessible at `http://ec2-13-60-237-198.eu-north-1.compute.amazonaws.com:5173`
 
 ---
 
