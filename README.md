@@ -17,6 +17,7 @@ A full-stack SaaS application that empowers content creators with AI-powered too
 - [Database Schema](#database-schema)
 - [Authentication & Authorization](#authentication--authorization)
 - [Deployment](#deployment)
+- [Docker Setup](#docker-setup)
 
 ---
 
@@ -81,6 +82,15 @@ A full-stack SaaS application that empowers content creators with AI-powered too
 | Clerk | Authentication, user management, subscriptions |
 | Neon DB | Serverless PostgreSQL database |
 
+### DevOps
+
+| Technology | Purpose |
+|------------|---------|
+| Docker | Containerization with multi-stage builds |
+| Docker Compose | Multi-service orchestration |
+| GitHub Actions | CI/CD pipeline (lint, build, deploy) |
+| AWS EC2 | Production deployment |
+
 ---
 
 ## Architecture
@@ -127,7 +137,11 @@ A full-stack SaaS application that empowers content creators with AI-powered too
 
 ```
 saas-app/
+├── .dockerignore                     # Docker build context exclusions
+├── docker-compose.yml                # Multi-service orchestration
+├── .github/workflows/ci.yml          # CI/CD pipeline
 ├── client/                          # Frontend (React + Vite)
+│   ├── Dockerfile                   # Multi-stage: Node build → serve
 │   ├── src/
 │   │   ├── main.jsx                 # App entry: ClerkProvider + Router
 │   │   ├── index.css                # TailwindCSS config
@@ -154,6 +168,7 @@ saas-app/
 │   └── vite.config.js
 │
 ├── server/                          # Backend (Express)
+│   ├── Dockerfile                   # Single-stage: node server.js
 │   ├── server.js                    # Express entry point
 │   ├── configs/
 │   │   ├── db.js                    # Neon DB connection
@@ -288,20 +303,47 @@ The app uses **Clerk** for complete auth management:
 
 ## Deployment
 
-The app is deployed on **Vercel** as two separate deployments:
+### EC2 + Docker (Production)
+
+Both client and server run as Docker containers on an AWS EC2 instance.
+
+**Quick overview:**
+- Client uses a multi-stage Dockerfile (build with Node, serve with `serve` on port 5173)
+- Server uses a single-stage Dockerfile with `node server.js` on port 3000
+- `docker-compose.yml` orchestrates both services
+
+**CI/CD (GitHub Actions):**
+On every push to `home-page` → lint → build → Docker build → SSH into EC2 → `docker compose up --build -d`
+
+**Manual commands on EC2:**
+```bash
+cd ~/saas-app
+docker compose up --build -d
+```
+
+### Vercel (Alternative)
 
 - **Client:** Static SPA with `vercel.json` rewrites for client-side routing
 - **Server:** Serverless functions using `@vercel/node` builder
 
 ```bash
 # Deploy client
-cd client
-vercel deploy
+cd client && vercel deploy
 
 # Deploy server
-cd server
-vercel deploy
+cd server && vercel deploy
 ```
+
+---
+
+## Docker Setup
+
+Each service has its own `Dockerfile`:
+
+- **Client:** Multi-stage build — Vite builds static files in a Node 22 stage, final stage uses `serve` to host on port 5173
+- **Server:** Single-stage build — installs production deps only (`--omit=dev`), runs `node server.js` on port 3000
+
+A root `.dockerignore` excludes `node_modules`, `.git`, and `.env` files from the build context.
 
 ---
 
