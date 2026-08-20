@@ -1,5 +1,5 @@
 import { useAuth, useUser } from "@clerk/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { motion } from "motion/react";
 import { fadeUp, stagger } from "../lib/motion.js";
@@ -61,11 +61,13 @@ const Community = () => {
     }
   };
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   useEffect(() => {
     if (user) {
       fetchCreations();
     }
   }, [user]);
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   return (
     <div className="flex-1 h-full flex flex-col gap-4 p-6">

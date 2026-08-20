@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Markdown from 'react-markdown'
 import { Globe, Lock } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Sparkle, Gem } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth, useUser } from '@clerk/react'
@@ -17,6 +16,7 @@ const CountUp = ({ value }) => {
 
   useEffect(() => {
     motionValue.set(value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return <motion.span>{rounded}</motion.span>
@@ -46,11 +46,13 @@ export const Dashboard = () => {
     }
   }
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   useEffect(() => {
     if (user) {
       getDashboardData()
     }
   }, [user])
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   return (
     <div className="h-full overflow-y-scroll p-6">

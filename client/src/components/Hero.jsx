@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { fadeUp, stagger } from '../lib/motion.js'
@@ -6,16 +6,14 @@ import { fadeUp, stagger } from '../lib/motion.js'
 const ROTATING_WORDS = ['stunning images', 'engaging articles', 'clean backgrounds', 'instant summaries']
 
 const Typewriter = ({ words, className }) => {
-  const [index, setIndex] = React.useState(0)
-  const [text, setText] = React.useState('')
-  const [deleting, setDeleting] = React.useState(false)
-  const [reduceMotion, setReduceMotion] = React.useState(false)
+  const [index, setIndex] = useState(0)
+  const [text, setText] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const [reduceMotion] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  )
 
-  React.useEffect(() => {
-    setReduceMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  }, [])
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (reduceMotion) return
     const current = words[index % words.length]
     let timeout

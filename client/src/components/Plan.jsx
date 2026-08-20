@@ -1,4 +1,3 @@
-import React from 'react'
 import * as Clerk from '@clerk/react'
 import { motion } from 'motion/react'
 import { fadeUp, stagger, whileInView } from '../lib/motion.js'

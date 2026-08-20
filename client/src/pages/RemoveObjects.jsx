@@ -1,4 +1,3 @@
-import React from 'react'
 import { Scissors, Image } from 'lucide-react'
 import axios from 'axios'
 import { useState } from 'react'

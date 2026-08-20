@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import { EASE_OUT } from '../lib/motion.js'
@@ -22,13 +22,15 @@ const Layout = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   useEffect(() => {
     if (location?.state && location.state.openSidebar) {
       setSidebarOpen(true)
       // clear the state so it doesn't reopen on navigation/back
-      try { window.history.replaceState({}, '', location.pathname) } catch {}
+      try { window.history.replaceState({}, '', location.pathname) } catch { /* ignore */ }
     }
   }, [location?.pathname])
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   if (!isLoaded) {
     return (

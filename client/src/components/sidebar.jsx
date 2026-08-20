@@ -1,4 +1,3 @@
-import React from 'react'
 import { useUser, useClerk } from '@clerk/react'
 import fallbackAvatar from '../assets/profile_img_1.png'
 import logo from '../assets/logo.png'
@@ -21,14 +20,13 @@ const navItems = [
 const Sidebar = ({ sidebar, setSidebar }) => {
   const { user, isSignedIn, isLoaded } = useUser()
   const clerk = useClerk()
+  const navigate = useNavigate()
 
   if (!isLoaded) return null
   if (!isSignedIn) return null
 
   const name = user?.fullName || user?.firstName || user?.username || 'Member'
   const avatar = user?.profileImageUrl || user?.imageUrl || fallbackAvatar
-
-  const navigate = useNavigate()
 
   return (
     <aside className={`fixed top-0 left-0 w-64 h-full bg-slate-900 text-white z-50 transform ${sidebar ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out sm:translate-x-0 pointer-events-auto`}>

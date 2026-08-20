@@ -1,4 +1,3 @@
-import React from 'react'
 import { PenLine, Edit } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@clerk/react'

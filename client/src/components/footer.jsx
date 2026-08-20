@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from '../assets/logo.png'
 import { motion } from 'motion/react'
 import { fadeUp, whileInView } from '../lib/motion.js'
