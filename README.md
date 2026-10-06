@@ -4,7 +4,7 @@ A full-stack SaaS application that empowers content creators with AI-powered too
 
 **Live Demo (Vercel):** [https://creatorhub-ebon.vercel.app/](https://creatorhub-ebon.vercel.app/)
 
-> **EC2 Deployment:** The app is also deployed on AWS EC2 with Docker + CI/CD. The EC2 instance may not be running at all times to manage costs. When active, it's accessible at `http://ec2-13-60-237-198.eu-north-1.compute.amazonaws.com:5173`
+> **EC2 Deployment:** The app is also deployed on AWS EC2 with Docker + CI/CD. The EC2 instance may not be running at all times to manage costs. When active, it's accessible at `http://ec2-13-53-122-201.eu-north-1.compute.amazonaws.com:5173`
 
 ---
 
